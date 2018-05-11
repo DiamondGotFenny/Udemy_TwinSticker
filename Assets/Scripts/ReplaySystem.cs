@@ -14,13 +14,28 @@ public class ReplaySystem : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        Record();
+    }
+
+    void PlayBack()
+    {
+        myrigidbody.isKinematic = true;
+        int frame = Time.frameCount % bufferFrames;
+        print("Reading time " + frame);
+        transform.position = keyframes[frame].position;
+        transform.rotation = keyframes[frame].roation;
+    }
+
+    private void Record()
+    {
+        myrigidbody.isKinematic = false;
         int frame = Time.frameCount % bufferFrames;
         float time = Time.time;
         print("writing time " + frame);
-
         keyframes[frame] = new myKeyFrame(time, transform.position, transform.rotation);
-	}
+    }
 }
 
 /// <summary>
