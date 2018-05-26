@@ -5,25 +5,34 @@ using UnityEngine;
 public class ReplaySystem : MonoBehaviour {
 
     private Rigidbody myrigidbody;
-    private const int bufferFrames = 100;
+    private const int bufferFrames = 500; //this actually is the maximum time we can record/store.
     myKeyFrame[] keyframes = new myKeyFrame[bufferFrames];
+    GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
         myrigidbody = GetComponent<Rigidbody>();
+        gameManager = GameManager.FindObjectOfType<GameManager>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        Record();
+        if (gameManager.recording)
+        {
+            Record();
+        }
+        else
+        {
+            PlayBack();
+        }
     }
 
     void PlayBack()
     {
         myrigidbody.isKinematic = true;
         int frame = Time.frameCount % bufferFrames;
-        print("Reading time " + frame);
+       // print("Reading time " + frame);
         transform.position = keyframes[frame].position;
         transform.rotation = keyframes[frame].roation;
     }
@@ -33,7 +42,7 @@ public class ReplaySystem : MonoBehaviour {
         myrigidbody.isKinematic = false;
         int frame = Time.frameCount % bufferFrames;
         float time = Time.time;
-        print("writing time " + frame);
+       // print("writing time " + frame);
         keyframes[frame] = new myKeyFrame(time, transform.position, transform.rotation);
     }
 }
