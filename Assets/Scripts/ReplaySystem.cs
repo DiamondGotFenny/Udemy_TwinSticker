@@ -5,7 +5,7 @@ using UnityEngine;
 public class ReplaySystem : MonoBehaviour {
 
     private Rigidbody myrigidbody;
-    private const int bufferFrames = 500; //this actually is the maximum time we can record/store.
+    private const int bufferFrames = 100; //this actually is the maximum time we can record/store.
     myKeyFrame[] keyframes = new myKeyFrame[bufferFrames];
     GameManager gameManager;
 

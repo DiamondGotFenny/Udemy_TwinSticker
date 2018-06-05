@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 public class GameManager : MonoBehaviour {
 
@@ -10,11 +15,45 @@ public class GameManager : MonoBehaviour {
 
     float intialFixedDeltaTime;
 
+    #region Singleton
+    private static GameManager _instance;
+
+    public static GameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<GameManager>();
+                DontDestroyOnLoad(_instance.gameObject);
+            }
+            return _instance;
+        }
+    }
+    #endregion
+
+    private void Awake()
+    {
+        #region SingletonRun
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            if (this != _instance)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+        #endregion
+    }
+
     private void Start()
     {
         PlayerPrefsManager.UnlockLevel(2);
-        print(PlayerPrefsManager.IsLevelUnlock(2));
-        print(PlayerPrefsManager.IsLevelUnlock(0));
+
 
         intialFixedDeltaTime = Time.fixedDeltaTime;
         Debug.Log(intialFixedDeltaTime + " intialFixedDeltaTime");
@@ -69,5 +108,29 @@ public class GameManager : MonoBehaviour {
     private void OnApplicationFocus(bool focus)
     {
         isPaused = !focus;
+    }
+
+    private void LoadNextLevel()
+    {
+        int sceneNum = SceneManager.sceneCountInBuildSettings;
+        int currentSceneIndext = SceneManager.GetActiveScene().buildIndex;
+        if (currentSceneIndext<sceneNum)
+        {
+            SceneManager.LoadScene(currentSceneIndext + 1);
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+
     }
 }
