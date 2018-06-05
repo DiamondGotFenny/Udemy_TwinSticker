@@ -619,10 +619,6 @@ Prefab:
       propertyPath: m_Name
       value: MobileDualStickControl
       objectReference: {fileID: 0}
-    - target: {fileID: 1976212794606824, guid: 60d828736849f7f4893a1b597ec23171, type: 2}
-      propertyPath: m_Name
-      value: QuitButton
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 60d828736849f7f4893a1b597ec23171, type: 2}
   m_IsPrefabParent: 0
